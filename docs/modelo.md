@@ -86,12 +86,12 @@ Una llave foránea (FK) referencia la llave primaria de otra tabla. Las FK de la
 
 | Tabla | Columnas | PK | FK y destino |
 |---|---|---|---|
-| clientes | id_cliente, nombre, telefono, email, fecha_registro | id_cliente | Ninguna |
-| vehiculos | id_vehiculo, placa, marca, modelo, anio, id_cliente | id_vehiculo | id_cliente → clientes.id_cliente |
-| mecanicos | id_mecanico, nombre, especialidad, telefono | id_mecanico | Ninguna |
-| servicios | id_servicio, nombre, precio_base | id_servicio | Ninguna |
-| ordenes | id_orden, fecha, estado, id_vehiculo, id_mecanico | id_orden | id_vehiculo → vehiculos.id_vehiculo; id_mecanico → mecanicos.id_mecanico |
-| orden_servicio | id_orden, id_servicio, cantidad, precio | **(id_orden, id_servicio), compuesta** | id_orden → ordenes.id_orden; id_servicio → servicios.id_servicio |
+| cliente | id_cliente, nombre, telefono, email, fecha_registro | id_cliente | Ninguna |
+| vehiculo | id_vehiculo, placa, marca, modelo, anio, id_cliente | id_vehiculo | id_cliente → cliente.id_cliente |
+| mecanico | id_mecanico, nombre, especialidad, telefono | id_mecanico | Ninguna |
+| servicio | id_servicio, nombre, precio_base | id_servicio | Ninguna |
+| orden | id_orden, fecha, estado, id_vehiculo, id_mecanico | id_orden | id_vehiculo → vehiculo.id_vehiculo; id_mecanico → mecanico.id_mecanico |
+| orden_servicio | id_orden, id_servicio, cantidad, precio | **(id_orden, id_servicio), compuesta** | id_orden → orden.id_orden; id_servicio → servicio.id_servicio |
 
 Cada combinación de orden y servicio aparece una sola vez en orden_servicio. Si se repite el mismo servicio en una orden, se aumenta cantidad; el modelo no admite varias líneas del mismo servicio con precios distintos dentro de esa orden.
 
@@ -101,32 +101,32 @@ Cada combinación de orden y servicio aparece una sola vez en orden_servicio. Si
 
 - **PRIMARY KEY:** las llaves indicadas en el modelo relacional identificarán cada fila. En orden_servicio, la llave será la combinación de id_orden e id_servicio.
 - **FOREIGN KEY:** se aplicará a las cinco referencias indicadas en la tabla anterior para impedir referencias a registros inexistentes. En SQLite deberá habilitarse la comprobación de llaves foráneas en cada conexión.
-- **NOT NULL:** todos los atributos serán obligatorios salvo clientes.email, que será opcional. Esto incluye las FK y ambos componentes de la PK compuesta, que no podrán quedar vacíos.
+- **NOT NULL:** todos los atributos serán obligatorios salvo cliente.email y mecanico.telefono, que serán opcionales. Esto incluye las FK y ambos componentes de la PK compuesta, que no podrán quedar vacíos.
 
 ### Unicidad
 
 | Restricción | Columna | Propósito |
 |---|---|---|
-| UNIQUE | clientes.telefono | Evitar que dos clientes compartan el mismo teléfono registrado, por decisión del modelo. |
-| UNIQUE | vehiculos.placa | Evitar registrar dos vehículos con la misma placa. |
-| UNIQUE | servicios.nombre | Evitar nombres duplicados en el catálogo de servicios. |
+| UNIQUE | cliente.telefono | Evitar que dos clientes compartan el mismo teléfono registrado, por decisión del modelo. |
+| UNIQUE | vehiculo.placa | Evitar registrar dos vehículos con la misma placa. |
+| UNIQUE | servicio.nombre | Evitar nombres duplicados en el catálogo de servicio. |
 
 ### Validación de valores
 
 | Restricción | Columna | Regla prevista |
 |---|---|---|
-| CHECK | vehiculos.anio | Entre 1980 y 2027, ambos incluidos. |
-| CHECK | servicios.precio_base | Mayor que 0. |
-| CHECK | ordenes.estado | IN ('abierta','terminada'): únicamente esos dos valores. |
+| CHECK | vehiculo.anio | Entre 1980 y 2027, ambos incluidos. |
+| CHECK | servicio.precio_base | Mayor que 0. |
+| CHECK | orden.estado | IN ('abierta','terminada'): únicamente esos dos valores. |
 | CHECK | orden_servicio.cantidad | Mayor que 0. |
 
 ### Valores predeterminados
 
 | Restricción | Columna | Valor previsto |
 |---|---|---|
-| DEFAULT | clientes.fecha_registro | Fecha actual al insertar el registro. |
-| DEFAULT | ordenes.fecha | Fecha actual al insertar el registro. |
-| DEFAULT | ordenes.estado | 'abierta'. |
+| DEFAULT | cliente.fecha_registro | Fecha actual al insertar el registro. |
+| DEFAULT | orden.fecha | Fecha actual al insertar el registro. |
+| DEFAULT | orden.estado | 'abierta'. |
 | DEFAULT | orden_servicio.cantidad | 1. |
 
 Los valores predeterminados se aplican cuando se omite la columna al insertar; no sustituyen un valor nulo explícito ni actualizan automáticamente las fechas después.
