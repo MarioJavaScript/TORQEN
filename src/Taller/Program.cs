@@ -41,6 +41,8 @@ while (true)
                     MenuClientes.Mostrar();
                     break;
                 case 2:
+                    MenuVehiculos.Mostrar();
+                    break;
                 case 3:
                 case 4:
                     Console.WriteLine("Próximamente");
