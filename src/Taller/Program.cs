@@ -38,6 +38,8 @@ while (true)
             switch (opcion)
             {
                 case 1:
+                    MenuClientes.Mostrar();
+                    break;
                 case 2:
                 case 3:
                 case 4:
