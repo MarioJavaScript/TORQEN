@@ -47,7 +47,7 @@ while (true)
                     MenuOrden.Mostrar();
                     break;
                 case 4:
-                    Console.WriteLine("Próximamente");
+                    MenuReportes.Mostrar();
                     break;
                 default:
                     Console.WriteLine("Opción inválida.");
